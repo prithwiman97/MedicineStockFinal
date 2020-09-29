@@ -1,0 +1,33 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medicinestockmodule
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: MedicineStockModule
+  template:
+    metadata:
+      labels:
+        app: MedicineStockModule
+    spec:
+      containers:
+      - name: medicinestockrepos
+        image: medicinestockcr.azurecr.io/medicinestockrepos:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: dsconfigsn
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medicinestockmodule
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: MedicineStockModule
